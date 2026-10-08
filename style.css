@@ -1,3 +1,5 @@
-body {
-  background-color: #000000;
+:root {
+  --primary-color: #cc0000;
+  --main-padding: 15px;
+  --font-stack: "Times New Roman", Times, Baskerville, Georgia, serif;
 }
