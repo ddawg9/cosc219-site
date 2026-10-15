@@ -30,7 +30,7 @@ nav a:focus {
     outline: 0.2rem solid var(--text-color);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
     nav {
         flex-direction: row;
         justify-content: space-between;
@@ -138,7 +138,7 @@ legend{
 }
 
 @media (min-width: 42rem) {
-    .about-layout {
+    .layout {
         grid-template-columns: minmax(0, 2fr) minmax(12rem, 1fr);
     }
 }
