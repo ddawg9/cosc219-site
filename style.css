@@ -122,3 +122,28 @@ legend{
     height: auto;
     display: block;
 }
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.sidebar {
+    align-self: start;
+    background-color: var(--secondary-color);
+    padding: var(--space);
+    border: 0.15rem solid var(--text-color);
+    border-radius: 0.5rem;
+}
+
+@media (min-width: 42rem) {
+    .about-layout {
+        grid-template-columns: minmax(0, 2fr) minmax(12rem, 1fr);
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
