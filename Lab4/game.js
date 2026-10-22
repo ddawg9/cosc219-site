@@ -28,8 +28,14 @@ const STARTING_LIVES = 6;
    Useful: .trim()  .toLowerCase()  .length  and comparison operators.
    ---------------------------------------------------------------------- */
 
-function normalizeGuess(input) {
+function normalizeGuess(input) 
+{
+   const guess = input.trim().toLowerCase();
 
+   if (guess.length === 1 && guess >= "a" && guess <= "z") 
+      return guess;
+  
+  return "";
 }
 
 
@@ -42,8 +48,9 @@ function normalizeGuess(input) {
    isValidGuess("!")   →  false
    ---------------------------------------------------------------------- */
 
-function isValidGuess(input) {
-
+function isValidGuess(input) 
+{
+   return normalizeGuess(input) !== "";
 }
 
 
@@ -58,8 +65,9 @@ function isValidGuess(input) {
    alreadyGuessed("z", "aet")  →  false
    ---------------------------------------------------------------------- */
 
-function alreadyGuessed(letter, guessedLetters) {
-
+function alreadyGuessed(letter, guessedLetters) 
+{
+   return guessedLetters.toLowerCase().includes(letter.toLowerCase());
 }
 
 
@@ -73,8 +81,10 @@ function alreadyGuessed(letter, guessedLetters) {
    isCorrect("z", "otter")  →  false
    ---------------------------------------------------------------------- */
 
-function isCorrect(letter, word) {
-
+function isCorrect(letter, word) 
+{
+   const guess = normalizeGuess(letter);
+   return guess !== "" && word.toLowerCase().includes(guess);
 }
 
 
@@ -88,8 +98,12 @@ function isCorrect(letter, word) {
    livesAfterGuess(0, false)  →  0
    ---------------------------------------------------------------------- */
 
-function livesAfterGuess(lives, correct) {
-
+function livesAfterGuess(lives, correct) 
+{
+   if (correct) 
+      return lives;
+  
+   return Math.max(0, lives - 1);
 }
 
 
@@ -104,8 +118,9 @@ function livesAfterGuess(lives, correct) {
    scoreFor("otter")     →  80
    ---------------------------------------------------------------------- */
 
-function scoreFor(word, lives) {
-
+function scoreFor(word, lives) 
+{
+   return word.length * 10 + lives * 5;
 }
 
 
@@ -125,8 +140,18 @@ function scoreFor(word, lives) {
    Use template literals.
    ---------------------------------------------------------------------- */
 
-function statusMessage(word, guessedLetters, lives) {
+function statusMessage(word, guessedLetters, lives) 
+{
+   if (lives <= 0) 
+      return `Out of lives. The word was "${word}".`;
+  
+   if (hasWon(word, guessedLetters)) 
+      return `You got it! "${word}" with ${lives} ${lives === 1 ? "life" : "lives"} left.`;
 
+  const guesses = guessedLetters === "" ? "nothing yet" : guessedLetters;
+  const lifeWord = lives === 1 ? "life" : "lives";
+
+  return `${lives} ${lifeWord} left. Guessed: ${guesses}`;
 }
 
 
@@ -135,8 +160,28 @@ function statusMessage(word, guessedLetters, lives) {
    90+ → "A"   80+ → "B"   70+ → "C"   60+ → "D"   below 60 → "F"
    ---------------------------------------------------------------------- */
 
-function gradeFor(score) {
-
+function gradeFor(score) 
+{
+   if (score >= 90) 
+   {
+      return "A";
+   } 
+   else if (score >= 80) 
+   {
+      return "B";
+   } 
+   else if (score >= 70) 
+   {
+      return "C";
+   } 
+   else if (score >= 60) 
+   {
+      return "D";
+   } 
+   else 
+   {
+      return "F";
+   }
 }
 
 
