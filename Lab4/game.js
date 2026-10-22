@@ -202,3 +202,11 @@ function revealWord(word, guessedLetters) {
 function hasWon(word, guessedLetters) {
   return !revealWord(word, guessedLetters).includes("_");
 }
+
+/*
+Part C
+
+1. The game would check the updated lives before recording the guess. Then it will display an incorrect status or potentially miss a win.
+
+2. Calling isValidGuess before normalizeGuess makes it so invalid input can be rejected before the game processes it.
+*/
