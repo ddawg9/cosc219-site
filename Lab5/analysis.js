@@ -60,8 +60,9 @@ function hasWon(word, guessedLetters)
      trailNames(TRAILS)[0]      →  "Knox Mountain"
    ---------------------------------------------------------------------- */
 
-function trailNames(trails) {
-
+function trailNames(trails) 
+{
+  return trails.map(trail => trail.name);
 }
 
 
@@ -70,8 +71,9 @@ function trailNames(trails) {
      openTrails(TRAILS).length  →  8
    ---------------------------------------------------------------------- */
 
-function openTrails(trails) {
-
+function openTrails(trails) 
+{
+  return trails.filter(trail => !trail.closed);
 }
 
 
@@ -84,8 +86,9 @@ function openTrails(trails) {
    Careful: find returns the ELEMENT. filter would return an array.
    ---------------------------------------------------------------------- */
 
-function findByName(trails, name) {
-
+function findByName(trails, name) 
+{
+  return trails.find(trail => trail.name.toLowerCase() === name.toLowerCase());
 }
 
 
@@ -101,8 +104,9 @@ function findByName(trails, name) {
        Pass a comparator.
    ---------------------------------------------------------------------- */
 
-function sortedByDistance(trails) {
-
+function sortedByDistance(trails) 
+{
+  return [...trails].sort((a, b) => a.km - b.km);
 }
 
 
