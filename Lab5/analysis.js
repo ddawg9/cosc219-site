@@ -28,8 +28,9 @@
    join(""). Three steps.
    ---------------------------------------------------------------------- */
 
-function revealWord(word, guessedLetters) {
-
+function revealWord(word, guessedLetters) 
+{
+  return word.split("").map(letter => guessedLetters.includes(letter) ? letter : "_").join("");
 }
 
 
@@ -43,8 +44,9 @@ function revealWord(word, guessedLetters) {
    Hint: which iterator answers "is this true for all of them?"
    ---------------------------------------------------------------------- */
 
-function hasWon(word, guessedLetters) {
-
+function hasWon(word, guessedLetters) 
+{
+  return word.split("").every(letter => guessedLetters.includes(letter));
 }
 
 
