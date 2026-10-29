@@ -149,6 +149,7 @@ function allUnder(trails, limit)
 function totalDistance(trails) 
 {
   const total = trails.reduce((sum, trail) => sum + trail.km, 0);
+
   return Math.round(total * 10) / 10;
 }
 
@@ -201,8 +202,11 @@ function countByRating(trails)
    filter, then map, then reduce. Read it as a sentence.
    ---------------------------------------------------------------------- */
 
-function openDistance(trails) {
+function openDistance(trails) 
+{
+  const total = trails.filter(trail => !trail.closed).map(trail => trail.km).reduce((sum, km) => sum + km, 0);
 
+  return Math.round(total * 10) / 10;
 }
 
 
@@ -215,8 +219,9 @@ function openDistance(trails) {
    Note the em dash — and that "(closed)" only appears when it is.
    ---------------------------------------------------------------------- */
 
-function summaryLines(trails) {
-
+function summaryLines(trails) 
+{
+  return trails.map(trail => `${trail.name} — ${trail.km} km, ${trail.rating}` + (trail.closed ? " (closed)" : ""));
 }
 
 
@@ -238,6 +243,17 @@ function summaryLines(trails) {
    is why you wrote them separately.
    ---------------------------------------------------------------------- */
 
-function report(trails) {
+function report(trails) 
+{
+  const open = openTrails(trails);
+  const longestOpen = longestTrail(open);
 
+  return {
+    total: trails.length,
+    open: open.length,
+    closed: trails.length - open.length,
+    openKm: openDistance(trails),
+    longestOpen: longestOpen ? longestOpen.name : null,
+    byRating: countByRating(trails)
+  }
 }
