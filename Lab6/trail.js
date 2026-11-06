@@ -11,15 +11,22 @@ export class Trail {
 
   /* A truly private field. The # is part of the name; nothing outside this
      class body can read or write it. Start it as false. */
-  // #closed = false;
+  #closed = false;
 
   /* A static property belongs to the CLASS, not to any instance.
      Count how many Trails have been created. */
-  // static count = 0;
+  static count = 0;
 
 
-  constructor(name, km, rating, gain) {
+  constructor(name, km, rating, gain) 
+  {
     // store the four values on `this`, and increase Trail.count
+    this.name = name;
+    this.km = km;
+    this.rating = rating;
+    this.gain = gain;
+
+    Trail.count++;
   }
 
 
@@ -31,15 +38,17 @@ export class Trail {
      Use one when the value is worked out from the object rather than
      stored on it.
      ---------------------------------------------------------------- */
-  get steepness() {
-
+  get steepness() 
+  {
+      return Math.round(this.gain / this.km);
   }
 
 
   /* get isClosed — read the private field.
      This is how the outside world is allowed to see #closed. */
-  get isClosed() {
-
+  get isClosed() 
+  {
+      return this.#closed;
   }
 
 
@@ -47,19 +56,24 @@ export class Trail {
      Return `this` from both, so calls can be chained:
          trail.close().describe()
      ---------------------------------------------------------------- */
-  close() {
-
+  close() 
+  {
+      this.#closed = true;
+      return this;
   }
 
-  open() {
-
+  open() 
+  {
+      this.#closed = false;
+      return this;
   }
 
 
   /* describe()  →  "Knox Mountain — 2.8 km, moderate"
      Note the em dash and the comma. Use a template literal. */
-  describe() {
-
+  describe() 
+  {
+      return `${this.name} — ${this.km} km, ${this.rating}`;
   }
 
 
@@ -72,8 +86,15 @@ export class Trail {
        JSON.parse(JSON.stringify(trail))
          →  { name: "...", km: 2.8, rating: "...", gain: 250, closed: false }
      ---------------------------------------------------------------- */
-  toJSON() {
-
+  toJSON() 
+  {
+      return {
+      name: this.name,
+      km: this.km,
+      rating: this.rating,
+      gain: this.gain,
+      closed: this.#closed
+      };
   }
 
 
@@ -84,8 +105,11 @@ export class Trail {
 
        Trail.fromObject({ name: "Z", km: 3, rating: "easy" }).gain  →  0
      ---------------------------------------------------------------- */
-  static fromObject(obj) {
+  static fromObject(obj) 
+  {
+      const { name, km, rating, gain = 0 } = obj;
 
+      return new Trail(name, km, rating, gain);
   }
 }
 
