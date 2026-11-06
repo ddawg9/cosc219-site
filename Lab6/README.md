@@ -1,0 +1,1 @@
+In part A I was surpised how the meta tags took on both og the tags.
