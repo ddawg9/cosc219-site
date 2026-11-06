@@ -122,7 +122,7 @@ export class BikeTrail extends Trail {
      `this` — touch `this` before that line and you get a ReferenceError,
      because the instance does not exist yet.
      ---------------------------------------------------------------- */
-  constructor(name, km, rating, gain, surface) 
+  constructor(name, km, rating, gain, surface = "gravel") 
   {
       super(name, km, rating, gain);
 

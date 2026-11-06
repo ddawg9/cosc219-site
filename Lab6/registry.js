@@ -4,24 +4,26 @@
 */
 
 // import the two classes from ./trail.js — note the .js is required
-
+import { Trail, BikeTrail } from "./trail.js";
 
 export class TrailRegistry {
 
   /* The array is PRIVATE. Nothing outside may push to it, sort it or
      empty it — this class decides what happens to the collection. */
-  // #trails = [];
+  #trails = [];
 
 
   /* Accept an optional array of Trails and add each one. */
-  constructor(trails = []) {
-
+  constructor(trails = []) 
+  {
+      trails.forEach(trail => this.add(trail));
   }
 
 
   /* get size — how many trails. */
-  get size() {
-
+  get size() 
+  {
+      return this.#trails.length;
   }
 
 
@@ -31,8 +33,9 @@ export class TrailRegistry {
      registry.all.push("junk") and walk straight past every check in
      this class. One of the tests does exactly that.
      ---------------------------------------------------------------- */
-  get all() {
-
+  get all() 
+  {
+      return [...this.#trails];
   }
 
 
@@ -41,45 +44,68 @@ export class TrailRegistry {
      Throw a TypeError if it is not, otherwise store it and return `this`.
      Use `instanceof`. Remember a BikeTrail IS a Trail.
      ---------------------------------------------------------------- */
-  add(trail) {
+  add(trail) 
+  {
+      if (!(trail instanceof Trail)) 
+      {
+         throw new TypeError("Only Trail objects can be added.");
+      }
 
+      this.#trails.push(trail);
+
+      return this;
   }
 
 
   /* find(name) — the matching Trail, ignoring case, or undefined. */
-  find(name) {
-
+  find(name) 
+  {
+      return this.#trails.find(trail => trail.name.toLowerCase() === name.toLowerCase());
   }
 
 
   /* byRating(rating) — every trail with that rating. */
-  byRating(rating) {
-
+  byRating(rating) 
+  {
+      return this.#trails.filter(trail => trail.rating === rating);
   }
 
 
   /* get openTrails — every trail that is not closed. */
-  get openTrails() {
-
+  get openTrails() 
+  {
+      return this.#trails.filter(trail => !trail.isClosed);
   }
 
 
   /* get totalDistance — all the km added up, to one decimal place. */
-  get totalDistance() {
+  get totalDistance() 
+  {
+      const total = this.#trails.reduce(
+      (sum, trail) => sum + trail.km, 0);
 
+      return Math.round(total * 10) / 10;
   }
 
 
   /* get steepest — the trail with the largest steepness.
      undefined when there are none. */
-  get steepest() {
-
+  get steepest() 
+  {
+      return this.#trails.reduce(
+      (steepest, trail) =>
+        !steepest || trail.steepness > steepest.steepness
+          ? trail
+          : steepest,
+      undefined
+      );
   }
 
 
   /* describeAll() — an array of every trail's describe() string. */
-  describeAll() {
-
+  describeAll() 
+  {
+      return this.#trails.map(trail => trail.describe());
   }
 
 
@@ -88,7 +114,24 @@ export class TrailRegistry {
      A row with a `surface` property becomes a BikeTrail; anything else
      becomes a Trail. Default a missing gain to 0.
      ---------------------------------------------------------------- */
-  static fromData(rows) {
+  static fromData(rows) 
+  {
+      const registry = new TrailRegistry();
 
+      rows.forEach(row => 
+      {
+         const { name, km, rating, gain = 0, surface } = row;
+
+         if (surface !== undefined) 
+         {
+            registry.add(new BikeTrail(name, km, rating, gain, surface));
+         } 
+         else 
+         {
+            registry.add(new Trail(name, km, rating, gain));
+         }
+      });
+
+      return registry;
   }
 }
