@@ -34,8 +34,58 @@
    function an <img onerror> and checks nothing was created.
    ---------------------------------------------------------------------- */
 
-export function createTrailItem(trail) {
+export function createTrailItem(trail) 
+{
+  // Create a list item
+  const li = document.createElement("li");
 
+  li.classList.add("trail");
+  li.dataset.id = trail.id;
+
+  // If trail is closed, add a class
+  if (trail.closed) 
+    li.classList.add("is-closed");
+  
+
+  // Create trail name
+  const name = document.createElement("span");
+  name.classList.add("trail-name");
+  name.textContent = trail.name;
+
+  // Create distance
+  const km = document.createElement("span");
+  km.classList.add("trail-km");
+  km.textContent = `${trail.km} km`;
+
+  // Create Close/Reopen button
+  const toggleButton = document.createElement("button");
+  toggleButton.type = "button";
+  toggleButton.dataset.action = "toggle";
+
+  const toggleLabel = document.createElement("span");
+  toggleLabel.classList.add("btn-label");
+
+  toggleLabel.textContent = trail.closed ? "Reopen" : "Close";
+
+  toggleButton.append(toggleLabel);
+
+  // Create Delete button
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.dataset.action = "delete";
+
+  deleteButton.setAttribute("aria-label", `Delete ${trail.name}`);
+
+  const deleteLabel = document.createElement("span");
+  deleteLabel.classList.add("btn-label");
+  deleteLabel.textContent = "Delete";
+
+  deleteButton.append(deleteLabel);
+
+  // Put everything inside the list item
+    li.append(name, km, toggleButton, deleteButton);
+
+  return li;
 }
 
 
@@ -45,8 +95,11 @@ export function createTrailItem(trail) {
    container.replaceChildren(...) empties and refills in one step.
    ---------------------------------------------------------------------- */
 
-export function renderTrails(trails, container) {
+export function renderTrails(trails, container) 
+{
+  const items = trails.map(trail => createTrailItem(trail));
 
+  container.replaceChildren(...items);
 }
 
 
@@ -59,6 +112,28 @@ export function renderTrails(trails, container) {
    Note "1 trail" but "2 trails". Round the distance to one decimal place.
    ---------------------------------------------------------------------- */
 
-export function summaryText(trails) {
+export function summaryText(trails) 
+{
+  // Check if list is empty
+  if (trails.length === 0) 
+    return "No trails yet. Add one above.";
+  
 
+  // Count all trails
+  const totalTrails = trails.length;
+
+  // Count open trails
+  const openTrails = trails.filter(trail => !trail.closed).length;
+
+  // Add all distances
+  const totalKm = trails.reduce((total, trail) => total + trail.km, 0);
+
+  // Round to one decimal place
+  const formattedKm = totalKm.toFixed(1);
+
+  // Check singular or plural
+  const word = totalTrails === 1 ? "trail" : "trails";
+
+  // Return the summary
+  return `${totalTrails} ${word}, ${openTrails} open, ${formattedKm} km total.`;
 }
