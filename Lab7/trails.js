@@ -19,8 +19,14 @@
      String(Date.now()) + Math.random().toString(16).slice(2, 8)
    ---------------------------------------------------------------------- */
 
-export function makeTrail(name, km) {
-
+export function makeTrail(name, km) 
+{
+   return {
+    id: String(Date.now()) + Math.random().toString(16).slice(2, 8),
+    name: name.trim(),
+    km: Number(km),
+    closed: false
+   };
 }
 
 
@@ -38,7 +44,17 @@ export function makeTrail(name, km) {
    Number.isFinite() rejects NaN and Infinity in one go.
    ---------------------------------------------------------------------- */
 
-export function isValidTrail(name, km) {
+export function isValidTrail(name, km) 
+{
+   const trimmedName = name.trim();
+   const distance = Number(km);
+
+   return (
+    trimmedName.length > 0 &&
+    km.trim() !== "" &&
+    Number.isFinite(distance) &&
+    distance > 0
+   );
 
 }
 
@@ -46,16 +62,18 @@ export function isValidTrail(name, km) {
 /* addTrail(trails, trail) — a NEW array with the trail on the end.
    Spread, do not push. */
 
-export function addTrail(trails, trail) {
-
+export function addTrail(trails, trail) 
+{
+   return [...trails, trail];
 }
 
 
 /* removeTrail(trails, id) — a NEW array without that trail.
    An id that is not there simply changes nothing. */
 
-export function removeTrail(trails, id) {
-
+export function removeTrail(trails, id) 
+{
+   return trails.filter(trail => trail.id !== id);
 }
 
 
@@ -65,8 +83,13 @@ export function removeTrail(trails, id) {
    edit the existing object. Spread it and override the one property.
    ---------------------------------------------------------------------- */
 
-export function toggleTrail(trails, id) {
-
+export function toggleTrail(trails, id) 
+{
+   return trails.map(trail =>
+    trail.id === id
+      ? { ...trail, closed: !trail.closed }
+      : trail
+   );
 }
 
 
@@ -87,6 +110,22 @@ export function toggleTrail(trails, id) {
    "trail".
    ---------------------------------------------------------------------- */
 
-export function findAction(target) {
+export function findAction(target) 
+{
+   const button = target.closest("button[data-action]");
 
+   if (!button) {
+      return null;
+   }
+
+   const row = button.closest(".trail");
+
+   if (!row) {
+      return null;
+   }
+
+   return {
+      action: button.dataset.action,
+      id: row.dataset.id
+   };
 }
