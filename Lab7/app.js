@@ -5,15 +5,46 @@
 
 // import from ./storage.js, ./render.js and ./trails.js
 
+import 
+{
+  loadTrails,
+  saveTrails,
+  clearTrails
+} from "./storage.js";
+
+import 
+{
+  renderTrails,
+  summaryText
+} from "./render.js";
+
+import 
+{
+  makeTrail,
+  isValidTrail,
+  addTrail,
+  removeTrail,
+  toggleTrail,
+  findAction
+} from "./trails.js";
 
 /* Load the saved trails into a `let` — the array is replaced, not edited,
    every time something changes. */
 
+let trails = loadTrails();
 
 /* update() — redraw the list, rewrite the summary, and save.
    Call it whenever the data changes, and once at the very bottom of this
    file so the page is not blank on load. */
 
+function update() 
+{
+  renderTrails(trails, document.querySelector("#trail-list"));
+
+  document.querySelector("#summary").textContent = summaryText(trails);
+
+  saveTrails(trails);
+}
 
 /* The add form.
 
@@ -24,6 +55,37 @@
    field, and return without changing anything.
    When it is valid: clear #error, add the trail, reset the form. */
 
+const form = document.querySelector("#add-form");
+
+form.addEventListener("submit", function(event) 
+{
+   // Stop from reloading
+   event.preventDefault();
+
+   // Get the input values
+   const name = document.querySelector("#trail-name").value;
+   const km = document.querySelector("#trail-km").value;
+   const error = document.querySelector("#error");
+
+   //Is valid?
+   if (!isValidTrail(name, km)) 
+   {
+    error.textContent = "Give the trail a name and a distance above zero.";
+
+    document.querySelector("#trail-name").focus();
+
+    return;
+   }
+
+   error.textContent = "";
+
+   // Create and add the new trail
+   const trail = makeTrail(name, km);
+   trails = addTrail(trails, trail);
+
+   form.reset();
+   update();
+});
 
 /* The list.
 
@@ -37,5 +99,42 @@
    have moved on from the form, and a stale validation message left on
    screen is just noise. */
 
+const list = document.querySelector("#trail-list");
+
+list.addEventListener("click", function(event) 
+{
+
+  document.querySelector("#error").textContent = "";
+
+  const action = findAction(event.target);
+
+  if (!action) 
+    return;
+  
+
+  // Delete the trail
+  if (action.action === "delete") 
+    trails = removeTrail(trails, action.id);
+  
+  // Close or reopen the trail
+  if (action.action === "toggle") 
+    trails = toggleTrail(trails, action.id);
+  
+  update();
+
+});
 
 /* The Clear all button: empty the array, clear storage, update. */
+
+const clearButton = document.querySelector("#clear-all");
+
+clearButton.addEventListener("click", function() 
+{
+  trails = [];
+
+  clearTrails();
+
+  update();
+});
+
+update();
