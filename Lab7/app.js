@@ -63,8 +63,8 @@ form.addEventListener("submit", function(event)
    event.preventDefault();
 
    // Get the input values
-   const name = document.querySelector("#trail-name").value;
-   const km = document.querySelector("#trail-km").value;
+   const name = document.querySelector("#name").value;
+   const km = document.querySelector("#km").value;
    const error = document.querySelector("#error");
 
    //Is valid?
@@ -126,7 +126,7 @@ list.addEventListener("click", function(event)
 
 /* The Clear all button: empty the array, clear storage, update. */
 
-const clearButton = document.querySelector("#clear-all");
+const clearButton = document.querySelector("#clear");
 
 clearButton.addEventListener("click", function() 
 {
